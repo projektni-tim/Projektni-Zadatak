@@ -1,0 +1,147 @@
+﻿@model IEnumerable<ProjektniZadatak.Models.Osoba>
+@using System.Drawing
+@using Microsoft.AspNet.Identity
+
+@{
+    ViewBag.Title = "Pocetna";
+}
+<div class="wrapper">
+    <header class="main-header">
+        <a href="/Osoba/Index" class="logo">
+            <span class="logo-mini"><b>P</b>C</span>
+            <span class="logo-lg"><b>Projektni</b>Centar</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="header">Upravljanje profilom</li>
+                <li>
+
+                    <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                        <i class="fa fa-user"></i> <span>Moj profil</span>
+                    </a>
+                </li>
+
+                <li class="header">Upravljanje korisnicima</li>
+                <li>
+                    <a href="/Osoba/Index">
+                        <i class="fa fa-table"></i> <span>Korisnici</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Korisnik/Index">
+                        <i class="fa fa-table"></i> <span>Administratori</span>
+                    </a>
+                </li>
+
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Lista korisnika
+            </h1>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Spisak svih korisnika</h3>
+                        </div>
+                        <div class="box-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>@Html.DisplayNameFor(model => model.Fotografija)</th>
+                                        <th>@Html.DisplayNameFor(model => model.Ime)</th>
+                                        <th>@Html.DisplayNameFor(model => model.Prezime)</th>
+                                        <th>@Html.DisplayNameFor(model => model.JMBG)</th>
+                                        <th>Opcije</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @{
+                                                    string l = item.Pol.NazivPola;
+                                                }
+                                                @*@Html.DisplayFor(modelItem => item.Fotografija)*@
+                                                @if (item.Fotografija != null)
+                                                {
+                                                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Fotografija)" height="50" width="50" alt="Slika korisnika" style="border-color=blue" />
+
+                                                }
+                                                else
+                                                {
+                                                    if (item.Pol.NazivPola == "Zenski")
+                                                    {
+                                                        <img src="~/Slike/female.png" class="profilnaMalaSlika" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Slike/male.png" class="profilnaMalaSlika" />
+                                                    }
+                                                }
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => item.Ime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Prezime)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.JMBG)</td>
+                                            <td>
+                                                @Html.ActionLink("Detalji", "Details", new { id = item.OsobaId }) 
+                                               
+                                                @if (User.IsInRole("Pravo administracije"))
+                                                {
+                                                   @Html.ActionLink("Izbriši", "Delete", new { id = item.OsobaId })
+                                                }
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="box-footer">
+                            @if(User.IsInRole("Pravo administracije"))
+                            { 
+                            <a href="/Osoba/Create"><input type="button" class="btn btn-info" value="Dodaj novog korisnika"></a>
+                       }
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 2.3.12
+        </div>
+        <strong>Copyright 2017 <a href="https://github.com/projektni-tim">Projektni tim</a>.</strong> 
+        reserved.
+    </footer>
+    <aside class="control-sidebar control-sidebar-dark">
+        <div class="tab-content">
+            <div class="tab-pane" id="control-sidebar-home-tab">
+            </div>
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+            </div>
+        </div>
+    </aside>
+    <div class="control-sidebar-bg"></div>
+</div>

@@ -1,0 +1,140 @@
+﻿@model ProjektniZadatak.Models.Osoba
+@using Microsoft.AspNet.Identity
+@{
+            ViewBag.Title = "Delete";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="/Osoba/Index" class="logo">
+                <span class="logo-mini"><b>P</b>C</span>
+                <span class="logo-lg"><b>Projektni</b>Centar</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">Upravljanje profilom</li>
+                    <li>
+
+                        <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                            <i class="fa fa-user"></i> <span>Moj profil</span>
+                        </a>
+                    </li>
+                    <li class="header">Upravljanje korisnicima</li>
+                    <li>
+                        <a href="/Osoba/Index">
+                            <i class="fa fa-table"></i> <span>Korisnici</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Korisnik/Index">
+                            <i class="fa fa-table"></i> <span>Administratori</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Podaci korisnika
+                    <small>detalji</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Osoba/Index"><input type="button" class="btn btn-info" value="Nazad na listu osoba" /></a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Brisanje osobe</h3>
+                            </div>
+                            <form>
+                                <div class="box-body">
+
+                                    <h4>Da li ste sigurni da želite da obrišete sledeću osobu?</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="box box-primary">
+                                                <div class="box-body table-responsive no-padding">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Fotografija</th>
+                                                                <th>Ime</th>
+                                                                <th>Prezime</th>
+                                                                <th>JMBG</th>
+                                                                <th>BLK</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    @if (Model.Fotografija != null)
+                                                                    {
+                                                                        <img src="data:image;base64,@System.Convert.ToBase64String(Model.Fotografija)" height="50" width="50" class="profilnaMalaSlika" />
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (Model.Pol.NazivPola == "Zenski")
+                                                                        {
+                                                                            <img src="~/Content/Female.jpg" height="50" width="50" class="profilnaMalaSlika" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img src="~/Content/Male.jpg" height="50" width="50" class="profilnaMalaSlika" />
+                                                                        }
+
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.Ime)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.Prezime)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.JMBG)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.BrojLicneKarte)
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="box-footer clearfix">
+                                                    <button type="submit" class="btn btn-info">Potvrdi brisanje</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

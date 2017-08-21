@@ -1,0 +1,288 @@
+﻿@model ProjektniZadatak.Models.Osoba
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Details";
+}
+<div class="wrapper">
+    <header class="main-header">
+        <a href="/Osoba/Index" class="logo">
+            <span class="logo-mini"><b>P</b>C</span>
+            <span class="logo-lg"><b>Projektni</b>Centar</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="header">Upravljanje profilom</li>
+                <li>
+
+                    <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                        <i class="fa fa-user"></i> <span>Moj profil</span>
+                    </a>
+                </li>
+                <li class="header">Upravljanje korisnicima</li>
+                <li>
+                    <a href="/Osoba/Index">
+                        <i class="fa fa-table"></i> <span>Korisnici</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Korisnik/Index">
+                        <i class="fa fa-table"></i> <span>Administratori</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Podaci o korisniku
+            </h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/Osoba/Index"><input type="button" class="btn btn-primary" value="Nazad na listu korisnika" /></a>
+                </li>
+            </ol>
+            <br>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-primary">
+                        <div class="box-body box-profile">
+                            @if (Model.Fotografija != null)
+            {
+                                <img class="profile-user-img img-responsive img-circle" src="data:image;base64,@System.Convert.ToBase64String(Model.Fotografija)" alt="User profile picture">
+                            }
+                            else
+                            {
+                                if (Model.Pol.NazivPola == "Zenski")
+                                {
+                                    <img src="~/Slike/female.png" class="profilnaVelikaSlika" />
+                                }
+                                else
+                                {
+                                    <img src="~/Slike/male.png" class="profilnaVelikaSlika" />
+                                }
+
+                            }
+                            <h3 class="profile-username text-center">@Html.DisplayFor(model => model.Ime) @Html.DisplayFor(model => model.Prezime)</h3>
+                            <p class="text-muted text-center">Korisnik</p>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-info" onclick="window.print();">Odštampaj korisnika</button>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title" id="beleska">Beleška</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="box-body">
+                            <textarea readonly="readonly" class="form-control " rows="4">@Html.DisplayFor(model => model.Beleska)</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Osnovni podaci</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="prezime">Pol</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="brlicnekarte" value="@Html.DisplayFor(model => model.Pol.NazivPola)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jmbg">JMBG</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="jmbg" onkeyup="proveraJMBG()" maxlength="13" autocomplete="off" value="@Html.DisplayFor(model => model.JMBG)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="brLicneKarte">Broj lične karte</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="brojlicnekarte" onkeyup="proveraBrojLicneKarte()" maxlength="9" value="@Html.DisplayFor(model => model.BrojLicneKarte)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="imeRoditelja">Ime roditelja</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="imeroditelja" onkeyup="validacijaImeRoditelja(document.form.imeroditelja)" value="@Html.DisplayFor(model => model.ImeRoditelja)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Datum rođenja:</label>
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input readonly="readonly" type="text" class="form-control pull-right" id="datepicker" value="@Html.DisplayFor(model => model.DatumRodjenja)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="opstinaRodj">Mesto rođenja</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="mestorodjenja" onkeyup="validacijaMestoOpstinaRodjenja()" value="@Html.DisplayFor(model => model.Opstina.Grad.NazivGrada)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="opstinaRodj">Opština rođenja</label>
+                                    <input readonly="readonly" class="form-control " type="text" id="opstinarodjenja" onkeyup="validacijaMestoOpstinaRodjenja()" value="@Html.DisplayFor(model => model.Opstina.NazivOpstine)">
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                @if (User.IsInRole("Pravo administracije") || User.IsInRole("Pravo unosa"))
+                                {
+                                <a href="/Osoba/Edit/@Model.OsobaId"><input type="button" class="btn btn-info" value="Izmeni" /></a>
+                                }
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Adrese</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    @foreach (var adresa in ViewBag.Adrese)
+                                    {
+                                        <label>@adresa.TipAdrese.VrstaAdrese</label>
+                                            <div class="row" name="prvaadresa1">
+                                                <div class="col-sm-8">
+                                                    <div class="form-group">
+                                                        <input type="text" readonly="readonly" id="adresa1naziv" class="form-control" onkeyup="validacijaAdresa1()" value="@adresa.NazivAdrese">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <input readonly="readonly" class="form-control " type="text" id="adresa1broj" onkeyup="validacijaAdresa1()" value="@adresa.Grad.NazivGrada">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                             @if (User.IsInRole("Pravo administracije") || User.IsInRole("Pravo unosa"))
+                             {
+                                <button type="submit" class="btn btn-info" onclick="window.location.href = '/Adresa/Index/@Model.OsobaId'">Izmeni</button>
+                             }
+                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Email adrese</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                @foreach (var emailAdresa in ViewBag.EmailAdrese)
+                                {
+                                    <label>@emailAdresa.TipEmailAdrese.VrstaEmailAdrese</label>
+                                    <div class="row" name="prvaadresa1">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <input type="text" readonly="readonly" id="adresa1naziv" class="form-control" onkeyup="validacijaAdresa1()" value="@emailAdresa.NazivEmailAdrese">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+                            <div class="box-footer">
+                            @if (User.IsInRole("Pravo administracije") || User.IsInRole("Pravo unosa"))
+                            {
+                                <button type="submit" class="btn btn-info" onclick="window.location.href = '/EmailAdresa/Index/@Model.OsobaId'">Izmeni</button>
+                            }
+                            </div>
+                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Mobilni telefoni</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                @foreach (var mobilniTelefon in ViewBag.MobilniTelefoni)
+                                {
+                                    <label>@mobilniTelefon.TipMobilni.VrstaMobilni</label>
+                                    <div class="row" name="prvaadresa1">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <input type="text" readonly="readonly" id="adresa1naziv" class="form-control" onkeyup="validacijaAdresa1()" value="@mobilniTelefon.LokalMobilni.LokalMob">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="form-group">
+                                                <input readonly="readonly" class="form-control " type="text" id="adresa1broj" onkeyup="validacijaAdresa1()" value="@mobilniTelefon.BrojMobilnog">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="box-footer">
+                            @if (User.IsInRole("Pravo administracije") || User.IsInRole("Pravo unosa"))
+                            {
+                                <button type="submit" class="btn btn-info" onclick="window.location.href = '/MobilniTelefon/Index/@Model.OsobaId'">Izmeni</button>
+                            }
+                            </div>
+                        </div>
+
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Fiksni telefoni</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                @foreach (var fiksniTelefon in ViewBag.FiksniTelefoni)
+                                {
+                                    <label>@fiksniTelefon.TipFiskni.VrstaFiksni</label>
+                                    <div class="row" name="prvaadresa1">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <input type="text" readonly="readonly" id="adresa1naziv" class="form-control" onkeyup="validacijaAdresa1()" value="@fiksniTelefon.LokalFiksni.LokalFik">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-9">
+                                            <div class="form-group">
+                                                <input readonly="readonly" class="form-control" type="text" id="adresa1broj" onkeyup="validacijaAdresa1()" value="@fiksniTelefon.BrojFiksnog">
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="box-footer">
+                            @if (User.IsInRole("Pravo administracije") || User.IsInRole("Pravo unosa"))
+                            {
+                                <button type="submit" class="btn btn-info" onclick="window.location.href = '/FiksniTelefon/Index/@Model.OsobaId'">Izmeni</button>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>

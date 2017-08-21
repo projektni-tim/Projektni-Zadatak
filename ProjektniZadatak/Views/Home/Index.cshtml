@@ -1,0 +1,100 @@
+﻿@model IEnumerable<ProjektniZadatak.Models.Osoba>
+@using System.Drawing;
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+  <a href="/Osoba/Create">Dodaj korisnika</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Fotografija)
+        </th>
+
+
+        <th>
+            @Html.DisplayNameFor(model => model.Pol.NazivPola)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImeRoditelja)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prezime)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.JMBG)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatumRodjenja)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @{
+                    string l = item.Pol.NazivPola;
+                }
+
+                @*@Html.DisplayFor(modelItem => item.Fotografija)*@
+                @if (item.Fotografija != null)
+                {
+                    <img src="data:image;base64,@System.Convert.ToBase64String(item.Fotografija)" class="profilnaMalaSlika" />
+
+                }
+                else
+                {
+                    if (item.Pol.NazivPola == "Zenski")
+                    {
+                        <img src="~/Slike/female.png" class="profilnaMalaSlika" />
+                    }
+                    else
+                    {
+                        <img src="~/Slike/male.png" class="profilnaMalaSlika" />
+                    }
+
+                }
+
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.Pol.NazivPola)
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.Ime)
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.ImeRoditelja)
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.Prezime)
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.JMBG)
+            </td>
+            <td>
+                <br />@Html.DisplayFor(modelItem => item.DatumRodjenja)
+            </td>
+
+
+            <td>
+                <br />
+                <a href="/Osoba/Edit/@item.OsobaId">Izmeni</a>|
+                <a href="/Osoba/Details/@item.OsobaId">Detaljnije</a>|
+                <a href="/Osoba/Delete/@item.OsobaId">Obrisi</a>
+
+            </td>
+        </tr>
+                    }
+
+</table>

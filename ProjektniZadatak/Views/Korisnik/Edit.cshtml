@@ -1,0 +1,171 @@
+﻿@model ProjektniZadatak.Models.ApplicationUser
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Korisnik", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="/Osoba/Index" class="logo">
+                <span class="logo-mini"><b>P</b>C</span>
+                <span class="logo-lg"><b>Projektni</b>Centar</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">Upravljanje profilom</li>
+                    <li>
+
+                        <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                            <i class="fa fa-user"></i> <span>Moj profil</span>
+                        </a>
+                    </li>
+                    <li class="header">Upravljanje korisnicima</li>
+                    <li>
+                        <a href="/Osoba/Index">
+                            <i class="fa fa-table"></i> <span>Korisnici</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Korisnik/Index">
+                            <i class="fa fa-table"></i> <span>Administratori</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Podaci korisnika
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="/Korisnik/Index"><input type="button" class="btn  btn-info" value="Nazad na listu administratora/moderatora" /></a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Izmena osnovnih podataka</h3>
+                            </div>
+     
+                            <form>
+                                <div class="box-body">
+
+                                    <h4 class="text-red"> @ViewBag.Poruka</h4>
+                                    @if (Model.Fotografija != null)
+                                    {
+                                        <img id="FotografijaIzmena" class="profile-user-img img-responsive img-circle" src="data:image;base64,@System.Convert.ToBase64String(Model.Fotografija)" alt="User profile picture">
+                                    }
+                                    <p>Izaberite novu fotografiju</p><input type="file" id="FotografijaIzmena" name="FotografijaIzmena" />
+                                    <h3 class="profile-username text-center">@Model.Ime @Model.Prezime</h3>
+                                    <p class="text-muted text-center">@ViewBag.PravoPristupa</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+
+                                            @if (User.IsInRole("Pravo administracije"))
+                                            {
+                                            <div class="form-group">
+                                                <label for="ime">Pravo  pristupa</label>
+                                                <select class="form-control" id="Privilegija" name="Privilegija">
+                                                    @foreach (var privilegija in ViewBag.PravaPristupa)
+                                                    {
+                                                        if (privilegija.Name == ViewBag.PravoPristupaKorisnika)
+                                                        {
+                                                            <option value="@privilegija.Name" selected>@privilegija.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@privilegija.Name">@privilegija.Name</option>
+                                                        }
+
+                                                    }
+                                                </select>
+                                            </div>
+                                            }
+                                            <div class="form-group">
+                                                <label for="ime">Ime</label>
+                                                @Html.EditorFor(model => model.Ime, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Ime, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="prezime">Prezime</label>
+                                                @Html.EditorFor(model => model.Prezime, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Prezime, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="imeRoditelja">Email</label>
+                                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="brLicneKarte">Pol</label><br />
+                                                @if (Model.Pol == "Zenski")
+                                                {
+                                                    <input checked="checked" id="Pol" name="Pol" type="radio" value="Zenski" /><strong>  Zenski</strong>
+                                                    <input id="Pol" name="Pol" type="radio" value="Muski" /><strong>  Muski</strong>
+                                                }
+                                                else
+                                                {
+                                                    <input id="Pol" name="Pol" type="radio" value="Zenski" /><strong>  Zenski</strong>
+                                                    <input checked="checked" id="Pol" name="Pol" type="radio" value="Muski" /><strong>  Muski</strong>
+                                                }
+                                            </div>
+                                            @if(User.IsInRole("Pravo administracije"))
+                                                {
+                                            <div class="form-group">
+                                                
+                                                <label for="datumRodj">Lozinka</label>
+                                                <a href="@($"/Account/ResetPassword?code={@Model.Id}&email={Model.Email}")"><input type="button" class="btn btn-info" value="Promena lozinke"></a>
+                                            </div>
+                                            }
+                                        </div>
+                                        @Html.HiddenFor(model => model.Fotografija)
+                                        @Html.HiddenFor(model => model.EmailConfirmed)
+                                        @Html.HiddenFor(model => model.PasswordHash)
+                                        @Html.HiddenFor(model => model.SecurityStamp)
+                                        @Html.HiddenFor(model => model.PhoneNumber)
+                                        @Html.HiddenFor(model => model.PhoneNumberConfirmed)
+                                        @Html.HiddenFor(model => model.TwoFactorEnabled)
+                                        @Html.HiddenFor(model => model.LockoutEndDateUtc)
+                                        @Html.HiddenFor(model => model.LockoutEnabled)
+                                        @Html.HiddenFor(model => model.AccessFailedCount)
+                                        @Html.HiddenFor(model => model.UserName)
+
+                                    </div>
+                                </div>
+                                <div class="box-footer">
+                                    <input type="submit" value="Potvrdi izmene" class="btn btn-success" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

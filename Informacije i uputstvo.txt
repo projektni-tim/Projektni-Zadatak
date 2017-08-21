@@ -1,4 +1,3 @@
-# Projektni-Zadatak
 *****************
 Clanovi tima koji su radili na prilozenom projektu:
 

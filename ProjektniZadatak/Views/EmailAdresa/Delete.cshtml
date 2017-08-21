@@ -1,0 +1,116 @@
+﻿@model ProjektniZadatak.Models.EmailAdresa
+@using Microsoft.AspNet.Identity
+@{
+            ViewBag.Title = "Delete";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="/Osoba/Index" class="logo">
+                <span class="logo-mini"><b>P</b>C</span>
+                <span class="logo-lg"><b>Projektni</b>Centar</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">Upravljanje profilom</li>
+                    <li>
+
+                        <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                            <i class="fa fa-user"></i> <span>Moj profil</span>
+                        </a>
+                    </li>
+                    <li class="header">Upravljanje korisnicima</li>
+                    <li>
+                        <a href="/Osoba/Index">
+                            <i class="fa fa-table"></i> <span>Korisnici</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Korisnik/Index">
+                            <i class="fa fa-table"></i> <span>Administratori</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Podaci korisnika
+                    <small>detalji</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li> <a href="/EmailAdresa/Index/@ViewBag.OsobaId"><input type="button" class="btn btn-info" value="Nazad na listu email adresa"></a></li>
+                </ol>
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Brisanje podatka</h3>
+                            </div>
+                            <form>
+                                <div class="box-body">
+                                    @if (ViewBag.Fotografija != null)
+                                    {
+                                        <img class="profile-user-img img-responsive img-circle" src="data:image;base64,@System.Convert.ToBase64String(ViewBag.Fotografija)" alt="User profile picture">
+                                    }
+                                    <h3 class="profile-username text-center">@ViewBag.ImePrezime </h3>
+                                    <h4>Da li ste sigurni da želite da obrišete sledeću email adresu?</h4>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="box box-primary">
+                                                <div class="box-body table-responsive no-padding">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Tip</th>
+                                                                <th>Email adresa</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.TipEmailAdrese.VrstaEmailAdrese)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(model => model.NazivEmailAdrese)
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="box-footer clearfix">
+                                                    <button type="submit" class="btn btn-info">Potvrdi brisanje</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

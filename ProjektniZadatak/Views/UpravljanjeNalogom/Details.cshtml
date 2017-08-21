@@ -1,0 +1,126 @@
+﻿@model ProjektniZadatak.Models.ApplicationUser
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Details";
+}
+<div class="wrapper">
+    <header class="main-header">
+        <a href="/Osoba/Index" class="logo">
+            <span class="logo-mini"><b>P</b>C</span>
+            <span class="logo-lg"><b>Projektni</b>Centar</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="header">Upravljanje profilom</li>
+                <li>
+
+                    <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                        <i class="fa fa-user"></i> <span>Moj profil</span>
+                    </a>
+                </li>
+                <li class="header">Upravljanje korisnicima</li>
+                <li>
+                    <a href="/Osoba/Index">
+                        <i class="fa fa-table"></i> <span>Korisnici</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Korisnik/Index">
+                        <i class="fa fa-table"></i> <span>Administratori</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </aside>
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Podaci administatora/moderatora
+            </h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/Korisnik/Index"><input type="button" class="btn btn-info" value="Nazad na listu administratora/moderatora" /></a>
+                </li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-danger">
+                        <div class="box-body box-profile">
+                            @if (Model.Fotografija != null)
+            {
+                                <img class="profile-user-img img-responsive img-circle" src="data:image;base64,@System.Convert.ToBase64String(Model.Fotografija)" alt="User profile picture">
+                            }
+                            else
+                            {
+                                if (Model.Pol == "Zenski")
+                                {
+                                    <img src="~/Slike/female.png" class="profilnaVelikaSlika" />
+                                }
+                                else
+                                {
+                                    <img src="~/Slike/male.png" class="profilnaVelikaSlika" />
+                                }
+
+                            }
+                            <h3 class="profile-username text-center">@Html.DisplayFor(model => model.Ime) @Html.DisplayFor(model => model.Prezime)</h3>
+                            <p class="text-muted text-center">@ViewBag.PravoPristupa</p>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-info" onclick="window.print();">Odštampaj korisnika</button>
+                            <span style="padding-right: 30px;"  class="btn btn-info">@Html.Partial("_LoginPartial")</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="col-md-6">
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Osnovni podaci</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="prezime">Email</label>
+                                    <input class="form-control " readonly="readonly" type="text" id="brlicnekarte" value="@Html.DisplayFor(model => model.Email)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jmbg">Pol</label>
+                                    <input class="form-control" readonly="readonly" type="text" id="jmbg" onkeyup="proveraJMBG()" maxlength="13" autocomplete="off" value="@Html.DisplayFor(model => model.Pol)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="datumRodj">Lozinka</label>
+                                    <a href="@($"/Manage/ChangePassword/{@Model.Id}")"><input type="button" class="btn btn-default" value="Promena lozinke"></a>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <a href="/UpravljanjeNalogom/Edit/@User.Identity.GetUserId()"><input type="button" class="btn btn-info" value="Izmeni podatke" /></a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>

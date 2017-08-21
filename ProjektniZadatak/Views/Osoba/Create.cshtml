@@ -1,0 +1,297 @@
+﻿@model ProjektniZadatak.Models.OsobaViewModel
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Create", "Osoba", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="/Osoba/Index" class="logo">
+                <span class="logo-mini"><b>P</b>C</span>
+                <span class="logo-lg"><b>Projektni</b>Centar</span>
+            </a>
+            <nav class="navbar navbar-static-top">
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                    <li class="header">Upravljanje profilom</li>
+                    <li>
+
+                        <a href="@($"/UpravljanjeNalogom/Details/{@User.Identity.GetUserId()}")">
+                            <i class="fa fa-user"></i> <span>Moj profil</span>
+                        </a>
+                    </li>
+                    <li class="header">Upravljanje korisnicima</li>
+                    <li>
+                        <a href="/Osoba/Index">
+                            <i class="fa fa-table"></i> <span>Korisnici</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Korisnik/Index">
+                            <i class="fa fa-table"></i> <span>Administratori</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    Unos novog korisnika
+                </h1>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/Osoba/Index"><input type="button" class="btn btn-info" value="Nazad na listu korisnika" /></a>
+                    </li>
+                </ol>
+                <br />
+            </section>
+            <section class="content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-primary">
+                            <div class="box-header">
+                            </div>
+                            <form>
+                                <div class="box-body">
+                                    <h5><b>Izaberite fotografiju</b></h5>
+                                    <input type="file" id="Fotografija" name="upload" />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="ime">Ime</label>
+                                                @Html.EditorFor(model => model.Ime, new { htmlAttributes = new { @class = "form-control", @id="ime", @onblur= "proverica()" } })
+                                                @Html.ValidationMessageFor(model => model.Ime, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="prezime">Prezime</label>
+                                                @Html.EditorFor(model => model.Prezime, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.Prezime, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="imeRoditelja">Ime roditelja</label>
+                                                @Html.EditorFor(model => model.ImeRoditelja, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ImeRoditelja, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Pol</label>
+                                                @Html.DropDownList("PolId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.PolId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="datumRodj">Datum rodjenja</label>
+                                                @Html.EditorFor(model => model.DatumRodjenja, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.DatumRodjenja, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <!------ desna strana ---->
+                                            <div class="form-group">
+                                                <label for="opstinaRodj">Mesto rodjenja</label>
+                                                <select class="form-control" id="GradRodjenjaId" name="GradRodjenjaId">
+                                                    @foreach (var grad in @ViewBag.GradRodjenja)
+                                                    {
+                                                        <option value="@grad.GradId">@grad.NazivGrada </option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="OpstinaRodjenjaId">Opstina rodjenja</label>
+                                                <select class="form-control" id="OpstinaRodjenjaId" name="OpstinaRodjenjaId"></select>
+                                                @Html.ValidationMessageFor(model => model.OpstinaRodjenjaId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="jmbg">JMBG</label>
+                                                @Html.EditorFor(model => model.JMBG, new { htmlAttributes = new { @class = "form-control", @name="jmbg", @id="jmbg" ,@onkeyup= "proveraJMBG()" } })
+                                                @Html.ValidationMessageFor(model => model.JMBG, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="brLicneKarte">Broj licne karte</label>
+                                                @Html.EditorFor(model => model.BrojLicneKarte, new { htmlAttributes = new { @class = "form-control", @id="blk" } })
+                                                @Html.ValidationMessageFor(model => model.BrojLicneKarte, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="">Beleška</label>
+                                                <textarea class="form-control text-box single-line" id="Beleska" name="Beleska"></textarea>
+                                                @Html.ValidationMessageFor(model => model.Beleska, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!------ Adresa, email adresa, mobilni i fiksni telefon ---->
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <h4 class="box-title">Adresa</h4>
+                                                <label for="tipAdrese">Tip adrese</label>
+                                                @Html.DropDownList("TipAdreseId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.TipAdreseId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="grad">Grad</label>
+                                                @Html.DropDownList("GradId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.GradId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="ulicaIBroj">Ulica i broj</label>
+                                                @Html.EditorFor(model => model.NazivAdrese, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.NazivAdrese, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <h4 class="box-title">Mobilni telefon</h4>
+                                                <label for="tipMobilni">Tip mobilnog telefona</label>
+                                                @Html.DropDownList("TipMobilniId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.TipMobilniId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="lokalMobilni">Mobilni telefon lokal</label>
+                                                @Html.DropDownList("LokalMobilniId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.LokalMobilniId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="broj">Mobilni telefon broj</label>
+                                                @Html.EditorFor(model => model.BrojMobilnog, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.BrojMobilnog, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <h4 class="box-title">Fiksni telefon</h4>
+                                                <label for="tipMobilni">Tip fiksnog telefona</label>
+                                                @Html.DropDownList("TipFiksniId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.TipFiksniId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="lokalFiksni">Fiksni telefon lokal</label>
+                                                @Html.DropDownList("LokalFiksniId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.LokalFiksniId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="broj">Fiksni telefon broj</label>
+                                                @Html.EditorFor(model => model.BrojFiksnog, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.BrojFiksnog, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <h4 class="box-title">Email adresa</h4>
+                                                <label for="tipEmail">Tip email adrese</label>
+                                                @Html.DropDownList("TipEmailAdreseId", null, htmlAttributes: new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(model => model.TipEmailAdreseId, "", new { @class = "text-danger" })
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                @Html.EditorFor(model => model.NazivEmailAdrese, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.NazivEmailAdrese, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="box-footer">
+                                    <input type="submit" value="Dodaj korisnika" class="btn btn-success" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/validacija.js"></script>
+    
+    	<script>
+        $(document).ready(function proveraJMBG() {
+            $('#jmbg').keyup(function () {
+                var input = $('#jmbg').val();
+                var jmbg = new JMBG(input);
+                $('#jmbg_result').html('');
+                $('#jmbg_result').append('Validan: ' + jmbg.validan());
+                
+            
+                if(jmbg.validan()==true)
+                {
+                    document.getElementById("jmbg").style.background = zelenaPozadina;
+                }
+                else
+                {
+                    document.getElementById("jmbg").style.background = crvenaPozadina;
+                }
+            });
+        });
+    </script>
+
+
+
+    <script>
+
+        function VratiOpstine(id) {
+
+        var zahtev = $.getJSON("/Osoba/VratiOpstine/"+id);
+
+        zahtev.done(function (opstine) {
+
+            for (var i = 0; i < opstine.length; i++) {
+                $("#OpstinaRodjenjaId").append("<option value= "+ opstine[i].OpstinaId + ">" + opstine[i].NazivOpstine + "</option>");
+            }
+
+        });
+
+
+    }
+
+
+    $(function () {
+
+         $("#GradRodjenjaId").change(function () {
+
+            var id=$("#GradRodjenjaId").val();
+            $("#OpstinaRodjenjaId").html("");
+            VratiOpstine(id);
+ 
+        });
+    });
+
+    $(function () {
+
+        var id = $("#GradRodjenjaId");
+        VratiOpstine(id);
+    })
+
+    </script>
+
+
+
+
+
+
+}
